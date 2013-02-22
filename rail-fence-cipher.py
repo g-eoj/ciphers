@@ -2,24 +2,27 @@
 from sys import argv
 
 
+def railPosition(start_position, rails, up):
+    if start_position == 0:
+        up = False
+    elif start_position == rails - 1:
+        up = True
+    if up:
+        return start_position - 1, up
+    else:
+        return start_position + 1, up
+
+
 def encipher(plain_text, rails):
     plain_text = ''.join(plain_text.split())
     cipher_text = []
     for r in range(rails):
         cipher_text.append('')
-    rail = -1
+    rail = 0
     up = False
-    # track rail position
     for t in plain_text:
-        if rail == 0:
-            up = False
-        elif rail == rails - 1:
-            up = True
-        if up:
-            rail -= 1
-        else:
-            rail += 1
         cipher_text[rail] += t
+        rail, up = railPosition(rail, rails, up)
     cipher_text = ''.join(cipher_text)
     return cipher_text
 
@@ -28,41 +31,23 @@ def decipher(cipher_text, rails):
     plain_text = ''
     chunks = []
     chunkSizes = []
-
     for r in range(rails):
         chunkSizes.append(0)
+    rail = 0
     up = False
-    rail = -1
     for i in range(len(cipher_text)):
-        if rail == 0:
-            up = False
-        elif rail == rails - 1:
-            up = True
-        if up:
-            rail -= 1
-        else:
-            rail += 1
         chunkSizes[rail] += 1
-
+        rail, up = railPosition(rail, rails, up)
     position = 0
     for r in range(rails):
         chunks.append(cipher_text[position:position + chunkSizes[r]])
         position += chunkSizes[r]
-
+    rail = 0
     up = False
-    rail = -1
     for i in range(len(cipher_text)):
-        if rail == 0:
-            up = False
-        elif rail == rails - 1:
-            up = True
-        if up:
-            rail -= 1
-        else:
-            rail += 1
         plain_text += chunks[rail][0]
         chunks[rail] = chunks[rail].replace(chunks[rail][0], '', 1)
-
+        rail, up = railPosition(rail, rails, up)
     return plain_text
 
 # cipher_text = encipher("What's going on", 4)
