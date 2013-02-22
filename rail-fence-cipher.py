@@ -24,10 +24,12 @@ def encipher(plain_text, rails):
         cipher_text[rail] += t
         rail, up = railPosition(rail, rails, up)
     cipher_text = ''.join(cipher_text)
+    cipher_text = ' '.join([cipher_text[p:p + 5] for p in xrange(0, len(cipher_text), 5)])
     return cipher_text
 
 
 def decipher(cipher_text, rails):
+    cipher_text = ''.join(cipher_text.split())
     plain_text = ''
     chunks = []
     chunkSizes = []
