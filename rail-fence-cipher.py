@@ -1,7 +1,3 @@
-# look into argparse
-from sys import argv
-
-
 def railPosition(start_position, rails, up):
     if start_position == 0:
         up = False
@@ -13,11 +9,13 @@ def railPosition(start_position, rails, up):
         return start_position + 1, up
 
 
+def removeSpaces(s):
+    return ''.join(s.split())
+
+
 def encipher(plain_text, rails):
-    plain_text = ''.join(plain_text.split())
-    cipher_text = []
-    for r in range(rails):
-        cipher_text.append('')
+    plain_text = removeSpaces(plain_text)
+    cipher_text = ['' for r in xrange(rails)]
     rail = 0
     up = False
     for t in plain_text:
@@ -29,12 +27,10 @@ def encipher(plain_text, rails):
 
 
 def decipher(cipher_text, rails):
-    cipher_text = ''.join(cipher_text.split())
+    cipher_text = removeSpaces(cipher_text)
     plain_text = ''
     chunks = []
-    chunkSizes = []
-    for r in range(rails):
-        chunkSizes.append(0)
+    chunkSizes = [0 for r in xrange(rails)]
     rail = 0
     up = False
     for i in range(len(cipher_text)):
@@ -52,20 +48,14 @@ def decipher(cipher_text, rails):
         rail, up = railPosition(rail, rails, up)
     return plain_text
 
-# cipher_text = encipher("What's going on", 4)
-# print decipher(cipher_text, 4)
-
-if len(argv) > 1:
-    plain_text = argv[1]
-else:
-    plain_text = raw_input("Plain text> ")
-    rail_count = int(raw_input("How many rails> "))
-cipher_text = encipher(plain_text, rail_count)
-print cipher_text
-print decipher(cipher_text, rail_count)
-
-ctext_file_name = raw_input("Save as (leave blank if you don't want to save): ")
-if len(ctext_file_name) > 0:
-    ctext_file = open(ctext_file_name, 'w')
-    ctext_file.write(cipher_text)
-    ctext_file.close()
+test_cases = [("What's going on?", 3), ("What's going on?", 4), ("Ordinal: measures by rank order only.", 6),
+              ("The ink drawings, of course, will be jeered at as obvious impostures; notwithstanding a strangeness of technique which art experts ought to remark and puzzle over.", 11)]
+for t in test_cases:
+    e = encipher(t[0], t[1])
+    d = decipher(e, t[1])
+    if removeSpaces(t[0]) == d:
+        print "Pass:", t
+    else:
+        print "Fail:", t
+        print "Encipher:", e
+        print "Decipher:", d
