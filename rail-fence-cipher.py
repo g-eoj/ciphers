@@ -17,14 +17,23 @@ def removeSpaces(s):
     return ''.join(s.split())
 
 
+def alphaNumFilter(s):
+    return ''.join(c for c in s if c.isalnum())
+
+
+def fiveCharUpper(s):
+    return ' '.join([s.upper()[p:p + 5] for p in xrange(0, len(s), 5)])
+
+
 def encipher(plain_text, rails):
-    plain_text = removeSpaces(plain_text)
+    # plain_text = removeSpaces(plain_text)
+    plain_text = alphaNumFilter(plain_text)
     cipher_text = [''] * rails
     rail = railPosition(rails)
     for t in plain_text:
         cipher_text[rail.next()] += t
     cipher_text = ''.join(cipher_text)
-    cipher_text = ' '.join([cipher_text[p:p + 5] for p in xrange(0, len(cipher_text), 5)])
+    cipher_text = fiveCharUpper(cipher_text)
     return cipher_text
 
 
@@ -45,7 +54,7 @@ def decipher(cipher_text, rails):
         rail_p = rail.next()
         plain_text += chunks[rail_p][0]
         chunks[rail_p] = chunks[rail_p].replace(chunks[rail_p][0], '', 1)
-    return plain_text
+    return plain_text.lower()
 
 test_cases = [("What's going on?", 3), ("What's going on?", 4), ("Ordinal: measures by rank order only.", 6),
               ("The ink drawings, of course, will be jeered at as obvious impostures; notwithstanding a strangeness of technique which art experts ought to remark and puzzle over.", 11)]
