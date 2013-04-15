@@ -57,11 +57,11 @@ def decipher(cipher_text, rails):
     return plain_text.lower()
 
 test_cases = [("What's going on?", 3), ("What's going on?", 4), ("Ordinal: measures by rank order only.", 6),
-              ("The ink drawings, of course, will be jeered at as obvious impostures; notwithstanding a strangeness of technique which art experts ought to remark and puzzle over.", 11)]
+              ("The ink drawings, of course, will be jeered at as obvious impostures;\n notwithstanding a strangeness of technique which art experts ought to remark and puzzle over.", 11)]
 for t in test_cases:
     e = encipher(t[0], t[1])
     d = decipher(e, t[1])
-    if removeSpaces(t[0]) == d:
+    if alphaNumFilter(t[0]).lower() == d:
         print "Pass:", t
         print "Encipher:", e
         print "Decipher:", d
