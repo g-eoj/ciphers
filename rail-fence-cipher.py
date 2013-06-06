@@ -1,16 +1,9 @@
 def railPosition(rails):
-    rail = 0
     while True:
-        if rail == 0:
-            down = True
-        elif rail == rails - 1:
-            down = False
-        if down:
-            yield rail
-            rail += 1
-        else:
-            yield rail
-            rail -= 1
+        for i in xrange(rails):
+            yield i
+        for i in xrange(rails - 2, 0, -1):
+            yield i
 
 
 def removeSpaces(s):
